@@ -1,0 +1,13 @@
+{
+  "/auth/login/page": "app/auth/login/page.js",
+  "/dashboard/counselor/alerts/page": "app/dashboard/counselor/alerts/page.js",
+  "/dashboard/counselor/counseling/page": "app/dashboard/counselor/counseling/page.js",
+  "/dashboard/counselor/page": "app/dashboard/counselor/page.js",
+  "/dashboard/counselor/students/page": "app/dashboard/counselor/students/page.js",
+  "/dashboard/student/history/page": "app/dashboard/student/history/page.js",
+  "/dashboard/student/page": "app/dashboard/student/page.js",
+  "/dashboard/student/resources/page": "app/dashboard/student/resources/page.js",
+  "/dashboard/student/tracker/page": "app/dashboard/student/tracker/page.js",
+  "/dashboard/student/whisper/page": "app/dashboard/student/whisper/page.js",
+  "/page": "app/page.js"
+}
