@@ -1,16 +1,13 @@
 "use client";
-
-export const dynamic = "force-dynamic";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Brain, ArrowLeft, Mail, Lock, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, Suspense } from "react";
 
-export default function Login() {
+function LoginFormContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const role = searchParams.get("role") || "student";
@@ -32,57 +29,69 @@ export default function Login() {
   };
 
   return (
+    <div className="w-full lg:w-1/2 flex flex-col justify-center px-8 sm:px-16 md:px-24 z-10 relative">
+      <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }}>
+        <Link href="/" className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors mb-12">
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Kembali ke Beranda
+        </Link>
+        
+        <div className="mb-8">
+          <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl ${roleDisplay.bg} mb-6`}>
+            <Brain className={`w-6 h-6 ${roleDisplay.color}`} />
+          </div>
+          <h1 className="text-3xl font-extrabold tracking-tight mb-2">Selamat Datang Kembali!</h1>
+          <p className="text-muted-foreground">{roleDisplay.desc}</p>
+        </div>
+
+        <form className="space-y-5" onSubmit={handleSubmit}>
+          <div className="space-y-2">
+            <label className="text-sm font-semibold">Email atau ID Pengguna</label>
+            <div className="relative">
+              <Mail className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
+              <Input type="text" placeholder="Masukkan ID anda" className="pl-10 h-12 bg-background/50 border-muted focus-visible:ring-primary backdrop-blur-sm" required />
+            </div>
+          </div>
+          
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-semibold">Kata Sandi</label>
+              <Link href="#" className={`text-sm font-medium ${roleDisplay.color} hover:underline`}>Lupa sandi?</Link>
+            </div>
+            <div className="relative">
+              <Lock className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
+              <Input type="password" placeholder="••••••••" className="pl-10 h-12 bg-background/50 border-muted focus-visible:ring-primary backdrop-blur-sm" required />
+            </div>
+          </div>
+
+          <Button type="submit" disabled={isLoading} className="w-full h-12 text-md mt-4 shadow-lg hover:shadow-xl transition-all" size="lg">
+            {isLoading ? "Masuk..." : "Masuk Sekarang"}
+          </Button>
+        </form>
+
+        <div className="mt-8 text-center text-sm text-muted-foreground">
+          Belum punya akun? <Link href="#" className={`font-semibold ${roleDisplay.color} hover:underline`}>Hubungi Admin Sekolah</Link>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
+export default function Login() {
+  return (
     <main className="min-h-screen flex bg-background relative overflow-hidden">
       {/* Background Ornaments */}
       <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] rounded-full bg-primary/10 blur-[120px] mix-blend-multiply" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] rounded-full bg-secondary/10 blur-[150px] mix-blend-multiply" />
 
       {/* Kontainer Form Kiri */}
-      <div className="w-full lg:w-1/2 flex flex-col justify-center px-8 sm:px-16 md:px-24 z-10">
-        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }}>
-          <Link href="/" className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors mb-12">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Kembali ke Beranda
-          </Link>
-          
-          <div className="mb-8">
-            <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl ${roleDisplay.bg} mb-6`}>
-              <Brain className={`w-6 h-6 ${roleDisplay.color}`} />
-            </div>
-            <h1 className="text-3xl font-extrabold tracking-tight mb-2">Selamat Datang Kembali!</h1>
-            <p className="text-muted-foreground">{roleDisplay.desc}</p>
-          </div>
-
-          <form className="space-y-5" onSubmit={handleSubmit}>
-            <div className="space-y-2">
-              <label className="text-sm font-semibold">Email atau ID Pengguna</label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
-                <Input type="text" placeholder="Masukkan ID anda" className="pl-10 h-12 bg-background/50 border-muted focus-visible:ring-primary backdrop-blur-sm" required />
-              </div>
-            </div>
-            
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <label className="text-sm font-semibold">Kata Sandi</label>
-                <Link href="#" className={`text-sm font-medium ${roleDisplay.color} hover:underline`}>Lupa sandi?</Link>
-              </div>
-              <div className="relative">
-                <Lock className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
-                <Input type="password" placeholder="••••••••" className="pl-10 h-12 bg-background/50 border-muted focus-visible:ring-primary backdrop-blur-sm" required />
-              </div>
-            </div>
-
-            <Button type="submit" disabled={isLoading} className="w-full h-12 text-md mt-4 shadow-lg hover:shadow-xl transition-all" size="lg">
-              {isLoading ? "Masuk..." : "Masuk Sekarang"}
-            </Button>
-          </form>
-
-          <div className="mt-8 text-center text-sm text-muted-foreground">
-            Belum punya akun? <Link href="#" className={`font-semibold ${roleDisplay.color} hover:underline`}>Hubungi Admin Sekolah</Link>
-          </div>
-        </motion.div>
-      </div>
+      <Suspense fallback={
+        <div className="w-full lg:w-1/2 flex items-center justify-center z-10">
+          <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+        </div>
+      }>
+        <LoginFormContent />
+      </Suspense>
 
       {/* Visual Kanan - Hidden on Mobile */}
       <div className="hidden lg:flex lg:w-1/2 relative p-12 items-center justify-center">
